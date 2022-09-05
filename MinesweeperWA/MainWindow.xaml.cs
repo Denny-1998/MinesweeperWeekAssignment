@@ -20,16 +20,18 @@ namespace MinesweeperWA
     /// </summary>
     public partial class MainWindow : Window
     {
+        
+
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void newGamebtn_Click(object sender, RoutedEventArgs e)
-        {
+            newGame(grid);
             
-            Game game = new Game();
-
         }
-    }
+
+        public static void newGame(Grid grid)
+        {
+            Game game = new Game(grid);
+        }
+    }       
 }
