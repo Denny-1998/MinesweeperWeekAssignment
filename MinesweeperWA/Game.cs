@@ -149,7 +149,8 @@ namespace MinesweeperWA
 
                 //recursive method to free all empty space
 
-                //guck mal später hier nach ob du das hinbekommst dass er immer wieder die darumliegenden felder checkt
+                //Throws some stackoverflow error. Needs fixing. 
+                //Without recoursion it just reveals a 3x3 field. 
                 //
                 //checkSpace(x, y);
 
