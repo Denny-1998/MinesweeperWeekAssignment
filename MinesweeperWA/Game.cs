@@ -59,27 +59,34 @@ namespace MinesweeperWA
             //eventhandler (checks if there is a bomb or reveals the value)
             btn.Click += (source, e) =>
             {
-
-                if (fields[x, y].HasBomb)
-                {
-                    btn.Background = new SolidColorBrush(Colors.Red);
-
-                    MessageBox.Show("game over!\nStart new game");
-                    MainWindow.newGame(grid);
-                }
-                else
+                //check is bomb is marked so you don't accidantally click it 
+                if (((SolidColorBrush)btn.Background).Color != Colors.Green)
                 {
 
-                    if (fields[x, y].Value == 0)
+                    fields[x, y].IsHidden = false;
+                    if (fields[x, y].HasBomb)
                     {
-                        btn.Content = "";
-                        btn.Background = new SolidColorBrush(Colors.White);
-                        checkSpace(x,y);
+                        btn.Background = new SolidColorBrush(Colors.Red);
 
+                        MessageBox.Show("game over!\nStart new game");
+                        MainWindow.newGame(grid);
                     }
                     else
                     {
-                        btn.Content = fields[x, y].Value;
+
+                        if (fields[x, y].Value == 0)
+                        {
+                            btn.Content = "";
+                            btn.Background = new SolidColorBrush(Colors.White);
+                            checkSpace(x, y);
+
+                        }
+                        else
+                        {
+                            btn.Content = fields[x, y].Value;
+                            btn.Background = new SolidColorBrush(Colors.White);
+
+                        }
                     }
                 }
             };
@@ -140,24 +147,35 @@ namespace MinesweeperWA
         void freeSpace(int x, int y)
         {
             Button btn = fields[x, y].btn;
+            
+
 
             if (fields[x, y].Value == 0)
             {
-                btn.Content = "";
+                
+                btn.Content = " ";
                 btn.Background = new SolidColorBrush(Colors.White);
 
+                if (fields[x, y].IsHidden)
+                {
+                    fields[x, y].IsHidden = false;
 
-                //recursive method to free all empty space
+                    //recursive method to free all empty space
 
-                //Throws some stackoverflow error. Needs fixing. 
-                //Without recoursion it just reveals a 3x3 field. 
-                //
-                //checkSpace(x, y);
+                    //Throws some stackoverflow error. Needs fixing. 
+                    //Without recoursion it just reveals a 3x3 field. 
+                    //
+                    //edit: found the error, it checked back and forth
+
+                    checkSpace(x, y);
+
+                }
 
             }
             else
             {
                 btn.Content = fields[x, y].Value;
+                btn.Background = new SolidColorBrush(Colors.White);
             }
         }
 
@@ -175,7 +193,7 @@ namespace MinesweeperWA
 
                 freeSpace(x, y - 1);
 
-                if (x < square)
+                if (x < square-1)
                 {
                     freeSpace(x + 1, y - 1);
                 }
@@ -187,13 +205,13 @@ namespace MinesweeperWA
                 freeSpace(x - 1, y);
             }
 
-            if (x < square)
+            if (x < square - 1)
             {
                 freeSpace(x + 1, y);
             }
 
             //reveal row + 1
-            if (y < square)
+            if (y < square-1)
             {
                 if (x != 0)
                 {
@@ -202,7 +220,7 @@ namespace MinesweeperWA
 
                 freeSpace(x, y + 1);
 
-                if (x < square)
+                if (x < square-1)
                 {
                     freeSpace(x + 1, y + 1);
                 }
